@@ -9,58 +9,75 @@ const discussion = new mongoose.Schema(
     title: {
       type: String,
       required: true
-  },
- 
-  participants: [
+    },
+
+    participants: [
       {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
-          required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
       }
-  ],
-  creator:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  game: {
+    ],
+    creator: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    challenge: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'challenge',
+      required: true
+    },
+    game: {
       type: String,
       required: true
-  },
+    },
 
-ispublic:{
-  type: Boolean,
-  default:"false",
-  required: true
-},
-Average_Bet:{
-  type: Number,
-  default:0.0,
-  required: true
-},
-Max_Players:{
-  type: Number,
-  default:1,
-  min:1,
-  required: true
-},
-code :{
-  type:String,
-  unique:true,
-  
-
-},
-  tags: {
+    ispublic: {
+      type: Boolean,
+      default: 'false',
+      required: true
+    },
+    Average_Bet: {
+      type: Number,
+      default: 0.0,
+      required: true
+    },
+    Max_Players: {
+      type: Number,
+      default: 1,
+      min: 1,
+      required: true
+    },
+    code: {
+      type: String,
+      unique: true
+    },
+    tags: {
       type: [String]
-  },
-  messages: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Message'
-  }]
+    },
+    messages: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
+      }
+    ]
   },
   { timestamps: true }
 );
-const ALLOWED_FIELDS = ['id','creator', 'participants','ispublic','Average_Bet','Max_Players', 'title', 'game', 'tags',"messages", 'createdAt'];
+const ALLOWED_FIELDS = [
+  'id',
+  'creator',
+  'participants',
+  'ispublic',
+  'Average_Bet',
+  'Max_Players',
+  'title',
+  'game',
+  'tags',
+  'messages',
+  'createdAt'
+];
 
 discussion.method({
   // query is optional, e.g. to transform data for response but only include certain "fields"
@@ -92,7 +109,7 @@ discussion.statics = {
     } catch (error) {
       throw error;
     }
-  },
+  }
 };
 
 const Model = mongoose.model('Discussion', discussion);

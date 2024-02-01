@@ -22,24 +22,28 @@ const list = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const createChallenge = (req: any, res: any, next: any) => {
-  const { play, game, Level, averageBet, console } = req.body;
-  if (!game || !console || !Level || !averageBet || !play) {
-    throw new APIError({
-      message: 'all fields are required',
-      status: 302
+  try {
+    const { play, game, Level, averageBet, console } = req.body;
+    if (!game || !console || !Level || !averageBet || !play) {
+      throw new APIError({
+        message: 'all fields are required',
+        status: 302
+      });
+    }
+    const creatorId = req.route.meta.user._id;
+
+    const discussion = new Challenge({
+      ...req.body,
+      userToChallenge: creatorId
     });
+
+    discussion.save((err: any) => {
+      if (err) return next(err);
+      res.json(discussion);
+    });
+  } catch (e) {
+    next(e);
   }
-  const creatorId = req.route.meta.user._id;
-
-  const discussion = new Challenge({
-    ...req.body,
-    userToChallenge: creatorId
-  });
-
-  discussion.save((err: any) => {
-    if (err) return next(err);
-    res.json(discussion);
-  });
 };
 
 const getOneChallenge = async (req: Request, res: Response, next: NextFunction) => {
@@ -54,34 +58,34 @@ const getOneChallenge = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-const acceptChallenge = async(req: any, res: any, next: any) => {
-    const { id} = req.param;
-    const user = req.route.meta.user;
-    try {
-        const challenge = await Challenge.get(id);
-      challenge.enabled =false;
-      const creatorId = req.route.meta.user._id;
-      const participants = Array.from(new Set([creatorId,challenge.challengeRequester]));
-  
-  
-      const discussion = new Discussion({
-        ispublic:false,
-        Average_Bet:challenge.averageBet,
-        Max_Players:2, 
-        title:`challenge`,
-        game:challenge.game,
-        messages:[],
-        participants,
-        creator:creatorId
-      });
-      challenge.save((err: any) => {
-        if (err) return next(err);
-        res.json(challenge,discussion);
+const acceptChallenge = async (req: any, res: any, next: any) => {
+  const { id } = req.param;
+  const user = req.route.meta.user;
+  try {
+    const challenge = await Challenge.get(id);
+    challenge.enabled = false;
+    const creatorId = req.route.meta.user._id;
+    const participants = Array.from(new Set([creatorId, challenge.challengeRequester]));
+
+    const discussion = new Discussion({
+      ispublic: false,
+      Average_Bet: challenge.averageBet,
+      Max_Players: 2,
+      title: `challenge`,
+      game: challenge.game,
+      messages: [],
+      participants,
+      creator: creatorId,
+      challenge: id
     });
-    }catch(err){
-        next(err);
-    }
-}
+    challenge.save((err: any) => {
+      if (err) return next(err);
+      res.json(challenge, discussion);
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 const joinChallenge = async (req: any, res: any, next: any) => {
   const { id } = req.param;
   const user = req.route.meta.user;
@@ -97,7 +101,6 @@ const joinChallenge = async (req: any, res: any, next: any) => {
     next(err);
   }
 };
-
 
 const deleteChallenge = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -118,4 +121,4 @@ module.exports = {
   list,
   getOneChallenge,
   acceptChallenge
-}
+};
