@@ -96,7 +96,7 @@ const acceptChallenge = async(req: any, res: any, next: any) => {
       });
       challenge.save((err: any) => {
         if (err) return next(err);
-        res.json(challenge);
+        res.json(challenge,discussion);
     });
     }catch(err){
         next(err);
