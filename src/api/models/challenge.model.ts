@@ -10,6 +10,10 @@ const ChallengeSchema = new mongoose.Schema(
       type: Boolean,
       default: true
     },
+    play: {
+      type: String,
+      required: true
+    },
     game: {
       type: String,
       required: true
@@ -40,6 +44,7 @@ const ALLOWED_FIELDS = [
   'enabled',
   'game',
   'console',
+  'play',
   'Level',
   'averageBet',
   'challengeRequester',

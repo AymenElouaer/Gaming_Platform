@@ -23,7 +23,7 @@ const list = async (req: Request, res: Response, next: NextFunction) => {
 
 const createChallenge = (req: any, res: any, next: any) => {
   const { play, game, Level, averageBet } = req.body;
-  if (!game || !console || !Level || !averageBet) {
+  if (!game || !console || !Level || !averageBet || !play) {
     throw new APIError({
       message: 'all fields are required',
       status: 302
