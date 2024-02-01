@@ -48,6 +48,9 @@ const userSchema = new mongoose.Schema(
       index: true,
       trim: true
     },
+    job: {
+      type: String
+    },
     services: {
       facebook: String,
       google: String
@@ -104,7 +107,9 @@ const ALLOWED_FIELDS = [
   'dicussions',
   'phoneNumber',
   'dateOfBirth',
-  'createdAt'
+  'createdAt',
+  'job',
+  ''
 ];
 
 /**
