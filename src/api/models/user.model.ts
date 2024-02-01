@@ -48,6 +48,9 @@ const userSchema = new mongoose.Schema(
       index: true,
       trim: true
     },
+    fullname: {
+      type: String
+    },
     job: {
       type: String
     },
