@@ -1,23 +1,24 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
-var mongoose = require('mongoose');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
+const mongoose = require('mongoose');
 require('dotenv').config();
 const http = require('http');
 const socketIo = require('socket.io');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var googleAuth = require('./routes/googleUsers');
-var facebookAuth = require('./routes/facebookUsers');
-var discussionRouter = require('./routes/discussions');
-var messageRouter = require('./routes/messages');
-var stripeRouter = require('./routes/stripe');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const googleAuth = require('./routes/googleUsers');
+const facebookAuth = require('./routes/facebookUsers');
+const discussionRouter = require('./routes/discussions');
+const messageRouter = require('./routes/messages');
+const stripeRouter = require('./routes/stripe');
+const walletRouter = require('./routes/wallet');
 
-var app = express();
+const app = express();
 app.use(cors());
 const server = http.createServer(app);
 const io = socketIo(server);
@@ -55,6 +56,7 @@ app.use('/auth', facebookAuth);
 app.use('/discussions', discussionRouter);
 app.use('/', messageRouter);
 app.use('/stripe', stripeRouter);
+app.use('/wallet', walletRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
