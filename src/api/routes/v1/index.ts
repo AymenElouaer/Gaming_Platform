@@ -8,6 +8,8 @@ const uploadRoutes = require('./upload.route');
 const dicussionsRoute = require('./discussion.route');
 const ChallengeRoute = require('./challenge.route');
 const messageRoute = require('./message.route');
+const walletRouter = require('./wallet.route');
+
 
 
 
@@ -31,6 +33,8 @@ router.use('/challenge', ChallengeRoute);
 router.use('/message', messageRoute);
 router.use('/users', userRoutes);
 router.use('/auth', authRoutes);
+router.use('/wallet', walletRouter);
+
 router.use('/upload', uploadRoutes);
 
 module.exports = router;

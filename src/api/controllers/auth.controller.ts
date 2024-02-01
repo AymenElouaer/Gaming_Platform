@@ -3,10 +3,12 @@ import { NextFunction, Request, Response, Router } from 'express';
 const httpStatus = require('http-status');
 import { User } from '../../api/models';
 const RefreshToken = require('../models/refreshToken.model');
+const Wallet = require("../models/userWallet.model")
 const moment = require('moment-timezone');
 import { apiJson, randomString } from '../../api/utils/Utils';
 import { sendEmail, welcomeEmail, forgotPasswordEmail, slackWebhook } from '../../api/utils/MsgUtils';
 const { SEC_ADMIN_EMAIL, JWT_EXPIRATION_MINUTES, slackEnabled, emailEnabled } = require('../../config/vars');
+const uuidv4 = require('uuid/v4');
 
 /**
  * Returns a formated object with tokens
@@ -30,9 +32,14 @@ function generateTokenResponse(user: any, accessToken: string) {
  */
 exports.register = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const psn = uuidv4().replace(/-/g, '').slice(0, 8);
+    req.body.psn = psn;
     const user = await new User(req.body).save();
+    const wallet = new Wallet({user:user._id})
     const userTransformed = user.transform();
     const token = generateTokenResponse(user, user.token());
+   
+
     res.status(httpStatus.CREATED);
     const data = { token, user: userTransformed };
     if (slackEnabled) {
@@ -98,6 +105,8 @@ exports.oAuth = async (req: any, res: Response, next: NextFunction) => {
     const { user } = req;
     const accessToken = user.token();
     const token = generateTokenResponse(user, accessToken);
+    user.psn= uuidv4();
+    console.log("user psn",user.psn)
     const userTransformed = user.transform();
     return res.json({ token, user: userTransformed });
   } catch (error) {

@@ -23,7 +23,7 @@ const WalletSchema = new mongoose.Schema({
   {
     timestamps: true
   });
-  const ALLOWED_FIELDS = ['id','balance', 'averageBet', 'user', 'createdAt'];
+  const ALLOWED_FIELDS = ['id','description', 'user', 'createdAt'];
 
   WalletSchema.statics = {
     list({ query }: { query: any }) {

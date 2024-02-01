@@ -68,6 +68,14 @@ const userSchema = new mongoose.Schema(
   phoneNumber: {
     type: String
 },
+psn:{
+  type :String,
+  unique: true,
+  required: true
+},
+about: {
+  type: String
+},
 dateOfBirth: {
     type: Date,
     required: true
@@ -84,7 +92,7 @@ dateOfBirth: {
     timestamps: true
   }
 );
-const ALLOWED_FIELDS = ['id', 'name', 'email', 'picture', 'role','country','dicussions','phoneNumber','dateOfBirth', 'createdAt'];
+const ALLOWED_FIELDS = ['id', 'name', 'email','about','psn', 'picture', 'role','country','dicussions','phoneNumber','dateOfBirth', 'createdAt'];
 
 /**
  * Add your

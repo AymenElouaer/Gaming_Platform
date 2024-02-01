@@ -48,10 +48,10 @@ const getOneChallenge = async (req: Request, res: Response, next: NextFunction) 
     try {
         const { id } = req.params;
         req.query = { ...req.query, _id:id};
-        const discussion = await Challenge.list(req);
+        const challenge = await Challenge.list(req);
        
         
-        apiJson({ req, res, data: discussion[0], model: Challenge });
+        apiJson({ req, res, data: challenge[0], model: Challenge });
     } catch (e) {
         next(e);
     }
