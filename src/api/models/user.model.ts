@@ -112,7 +112,7 @@ const ALLOWED_FIELDS = [
   'dateOfBirth',
   'createdAt',
   'job',
-  ''
+  'fullname'
 ];
 
 /**
