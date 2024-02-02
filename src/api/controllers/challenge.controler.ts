@@ -78,6 +78,7 @@ const acceptChallenge = async (req: any, res: any, next: any) => {
       creator: creatorId,
       challenge: id
     });
+    await discussion.save();
     challenge.save((err: any) => {
       if (err) return next(err);
       res.json({challenge, discussion});
@@ -86,6 +87,31 @@ const acceptChallenge = async (req: any, res: any, next: any) => {
     next(err);
   }
 };
+const refuseChallenge = async (req: any, res: any, next: any) => {
+  const { id } = req.params;
+  const user = req.route.meta.user;
+  try {
+    const challenge = await Challenge.get(id);
+    console.log('user', user);
+    console.log('challenge', challenge);
+
+    // Print the data types of user._id and challenge.userToChallenge
+    console.log('typeof user._id', typeof user._id);
+    console.log('typeof challenge.userToChallenge', typeof challenge.userToChallenge);
+
+    if (!user._id.equals(challenge.userToChallenge)) {
+      throw new Error('You are not the one who was challenged');
+    }
+    challenge.challengeRequester = null;
+    challenge.save((err: any) => {
+      if (err) return next(err);
+      res.json(challenge);
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const joinChallenge = async (req: any, res: any, next: any) => {
   const { id } = req.params;
   const user = req.route.meta.user;
@@ -120,5 +146,6 @@ module.exports = {
   deleteChallenge,
   list,
   getOneChallenge,
-  acceptChallenge
+  acceptChallenge,
+  refuseChallenge
 };
