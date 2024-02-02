@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.post('/createChallenge', authorize(), createChallenge);
 router.post('/joinChallenge/:id', authorize(), joinChallenge);
-router.post('/acceptChallenge/:id', authorize(), acceptChallenge);
+router.put('/acceptChallenge/:id', authorize(), acceptChallenge);
 
 
 router.route('/list').get(authorize(), list);

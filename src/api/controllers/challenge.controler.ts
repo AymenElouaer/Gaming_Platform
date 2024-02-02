@@ -59,7 +59,7 @@ const getOneChallenge = async (req: Request, res: Response, next: NextFunction) 
 };
 
 const acceptChallenge = async (req: any, res: any, next: any) => {
-  const { id } = req.param;
+  const { id } = req.params;
   const user = req.route.meta.user;
   try {
     const challenge = await Challenge.get(id);
@@ -80,14 +80,14 @@ const acceptChallenge = async (req: any, res: any, next: any) => {
     });
     challenge.save((err: any) => {
       if (err) return next(err);
-      res.json(challenge, discussion);
+      res.json({challenge, discussion});
     });
   } catch (err) {
     next(err);
   }
 };
 const joinChallenge = async (req: any, res: any, next: any) => {
-  const { id } = req.param;
+  const { id } = req.params;
   const user = req.route.meta.user;
   try {
     const challenge = await Challenge.get(id);

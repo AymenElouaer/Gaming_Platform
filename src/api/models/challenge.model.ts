@@ -1,6 +1,8 @@
 export {};
 const mongoose = require('mongoose');
 import { transformData, listData } from '../../api/utils/ModelUtils';
+const APIError = require('../../api/utils/APIError');
+const httpStatus = require('http-status');
 
 const console = ['playstation', 'xbox', 'pc'];
 const level = ['Beginner', 'Casual', 'Serious', 'Expert'];
@@ -64,7 +66,26 @@ ChallengeSchema.method({
 ChallengeSchema.statics = {
   list({ query }: { query: any }) {
     return listData(this, query, ALLOWED_FIELDS);
-  }
+  },
+  async get(id: any) {
+    try {
+      let challenge;
+
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        challenge = await this.findById(id).exec();
+      }
+      if (challenge) {
+        return challenge;
+      }
+
+      throw new APIError({
+        message: 'challenge does not exist',
+        status: httpStatus.NOT_FOUND
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 const Challenge = mongoose.model('challenge', ChallengeSchema);
