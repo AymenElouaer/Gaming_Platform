@@ -76,7 +76,8 @@ const ALLOWED_FIELDS = [
   'game',
   'tags',
   'messages',
-  'createdAt'
+  'createdAt',
+  'challenge'
 ];
 
 discussion.method({
