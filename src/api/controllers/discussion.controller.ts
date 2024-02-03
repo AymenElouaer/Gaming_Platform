@@ -131,7 +131,7 @@ const createCode = async(req: any, res: any, next: any) => {
         if(discussion.code !=null){
             res.json({ req, res, data: discussion.code });
         }
-       discussion.code =  uuidv4();
+       discussion.code = uuidv4().replace(/-/g, '').slice(0, 10);
        
        discussion.save((err: any) => {
         if (err) return next(err);

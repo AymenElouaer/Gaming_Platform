@@ -6,6 +6,8 @@ const ObjectId = mongoose.Types.ObjectId;
 const APIError = require('../../api/utils/APIError');
 const Challenge = require('../models/challenge.model');
 const Demande = require('../models/demande.model');
+const uuidv4 = require('uuid/v4');
+
 
 import { apiJson } from '../../api/utils/Utils';
 import { Discussion } from '../models';
@@ -66,6 +68,7 @@ const acceptChallenge = async (req: any, res: any, next: any) => {
     challenge.enabled = false;
     const creatorId = req.route.meta.user._id;
     const participants = Array.from(new Set([creatorId, challenge.challengeRequester]));
+    
 
     const discussion = new Discussion({
       ispublic: false,
@@ -76,7 +79,8 @@ const acceptChallenge = async (req: any, res: any, next: any) => {
       messages: [],
       participants,
       creator: creatorId,
-      challenge: id
+      challenge: id,
+      code:uuidv4().replace(/-/g, '').slice(0, 10)
     });
     await discussion.save();
     challenge.save((err: any) => {
